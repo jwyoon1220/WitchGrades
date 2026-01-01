@@ -6,3 +6,8 @@ depend: [ ProtocolLib ]
 commands:
   witch_grade:
   등급:
+  nickname:
+    aliases: [ "닉네임" ]
+    description: 닉네임 설정/재설정
+    usage: "/nickname set|설정 <플레이어> <닉네임>\n/nickname reset|재설정 <플레이어>"
+    permission: op

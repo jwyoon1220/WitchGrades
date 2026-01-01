@@ -3,6 +3,7 @@ package io.github.jwyoon1220.witchGrades
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
+import io.github.jwyoon1220.witchGrades.command.CustomNameCommand
 import io.github.jwyoon1220.witchGrades.command.GradeGUICommand
 import io.github.jwyoon1220.witchGrades.command.SetGradeCommand
 import io.github.jwyoon1220.witchGrades.db.CustomNameRepository
@@ -40,8 +41,15 @@ class WitchGrades : JavaPlugin() {
         gradeManager = GradeManager(this)
         playerProgressManager = PlayerProgressManager(this)
         saveDefaultConfig()
+
         getCommand("witch_grade")?.setExecutor(SetGradeCommand())
         getCommand("등급")?.setExecutor(GradeGUICommand())
+        getCommand("nickname")?.apply {
+            val executor = CustomNameCommand(customNameService)
+            setExecutor(executor)
+            tabCompleter = executor
+        }
+
         playerProgressManager.startAutoFlushTask()
 
         val repo = CustomNameRepository(this)
