@@ -5,9 +5,11 @@ import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
 import io.github.jwyoon1220.witchGrades.command.GradeGUICommand
 import io.github.jwyoon1220.witchGrades.command.SetGradeCommand
+import io.github.jwyoon1220.witchGrades.db.CustomNameRepository
 import io.github.jwyoon1220.witchGrades.grade.GradeManager
 import org.bukkit.Bukkit
 import io.github.jwyoon1220.witchGrades.grade.PlayerProgressManager
+import io.github.jwyoon1220.witchGrades.service.CustomNameService
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -23,6 +25,10 @@ class WitchGrades : JavaPlugin() {
         const val isDebug = true //프로덕션에서는 제거할것!
     }
 
+    lateinit var customNameService: CustomNameService
+        private set
+
+
     var protocolManager: ProtocolManager? = null
 
     override fun onLoad() {
@@ -37,6 +43,10 @@ class WitchGrades : JavaPlugin() {
         getCommand("witch_grade")?.setExecutor(SetGradeCommand())
         getCommand("등급")?.setExecutor(GradeGUICommand())
         playerProgressManager.startAutoFlushTask()
+
+        val repo = CustomNameRepository(this)
+        customNameService = CustomNameService(repo)
+
 
         server.pluginManager.registerEvents(GlobalEventListener(), this)
 
