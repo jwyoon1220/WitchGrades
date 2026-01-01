@@ -1,0 +1,8 @@
+name: WitchGrades
+version: '1.0-SNAPSHOT'
+main: io.github.jwyoon1220.witchGrades.WitchGrades
+api-version: '1.21'
+depend: [ ProtocolLib ]
+commands:
+  witch_grade:
+  등급:
