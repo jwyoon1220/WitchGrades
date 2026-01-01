@@ -6,6 +6,7 @@ import com.comphenix.protocol.ProtocolManager
 import io.github.jwyoon1220.witchGrades.command.CustomNameCommand
 import io.github.jwyoon1220.witchGrades.command.GradeGUICommand
 import io.github.jwyoon1220.witchGrades.command.SetGradeCommand
+import io.github.jwyoon1220.witchGrades.command.TitleCommand
 import io.github.jwyoon1220.witchGrades.db.CustomNameRepository
 import io.github.jwyoon1220.witchGrades.grade.GradeManager
 import org.bukkit.Bukkit
@@ -23,7 +24,6 @@ class WitchGrades : JavaPlugin() {
 
         val afkList = mutableMapOf<Player, Boolean>()
 
-        const val isDebug = true //프로덕션에서는 제거할것!
     }
 
     lateinit var customNameService: CustomNameService
@@ -42,6 +42,9 @@ class WitchGrades : JavaPlugin() {
         playerProgressManager = PlayerProgressManager(this)
         saveDefaultConfig()
 
+        val repo = CustomNameRepository(this)
+        customNameService = CustomNameService(repo)
+
         getCommand("witch_grade")?.setExecutor(SetGradeCommand())
         getCommand("등급")?.setExecutor(GradeGUICommand())
         getCommand("nickname")?.apply {
@@ -52,8 +55,6 @@ class WitchGrades : JavaPlugin() {
 
         playerProgressManager.startAutoFlushTask()
 
-        val repo = CustomNameRepository(this)
-        customNameService = CustomNameService(repo)
 
 
         server.pluginManager.registerEvents(GlobalEventListener(customNameService), this)
@@ -69,6 +70,9 @@ class WitchGrades : JavaPlugin() {
     override fun onDisable() {
         // Plugin shutdown logic
         playerProgressManager.shutdown()
+        for (player in Bukkit.getOnlinePlayers()) {
+            customNameService.removeDisplay(player)
+        }
 
     }
 }
