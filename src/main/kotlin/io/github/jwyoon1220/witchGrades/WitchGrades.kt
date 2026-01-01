@@ -56,7 +56,7 @@ class WitchGrades : JavaPlugin() {
         customNameService = CustomNameService(repo)
 
 
-        server.pluginManager.registerEvents(GlobalEventListener(), this)
+        server.pluginManager.registerEvents(GlobalEventListener(customNameService), this)
 
         server.scheduler.runTaskTimer(this, Runnable {
             for (player in Bukkit.getOnlinePlayers()) {
